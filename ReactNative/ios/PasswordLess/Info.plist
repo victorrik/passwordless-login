@@ -20,29 +20,33 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb1122588378433408</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.980982636933-tl31gsdc5kmeasstrcaj55iairb9csre</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>FacebookAppID</key>
+	<string>1122588378433408</string>
+	<key>FacebookClientToken</key>
+	<string>4427e4f2edb914c458ad14a69b29edcf</string>
+	<key>FacebookDisplayName</key>
+	<string>Passwordless</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-  <key>CFBundleURLTypes</key>
-  <array>
-    <dict>
-    <key>CFBundleURLSchemes</key>
-    <array>
-      <string>fb1122588378433408</string>
-    </array>
-    </dict>
-  </array>
-  <key>FacebookAppID</key>
-  <string>1122588378433408</string>
-  <key>FacebookClientToken</key>
-  <string>4427e4f2edb914c458ad14a69b29edcf</string>
-  <key>FacebookDisplayName</key>
-  <string>Passwordless</string>
-  <key>LSApplicationQueriesSchemes</key>
-  <array>
-    <string>fbapi</string>
-  </array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>

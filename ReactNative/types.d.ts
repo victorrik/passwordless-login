@@ -14,6 +14,7 @@ export type UserType = {
 		isAnonymous: boolean
 		creationTime: number
 		lastSignInTime: number
+		providerData:any,
 		// multiFactor: {
 		// 	enrolledFactors: Array
 		// }, 

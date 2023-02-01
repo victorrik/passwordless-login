@@ -11,11 +11,12 @@ import { PatitosError, UserType } from '@PasswordLessTypes';
 export const checkExistence = async ():Promise<false | UserType> => {
 	// Verificamos si ya ha iniciado sesioon
 	const currentUser = auth().currentUser
+	console.log(JSON.stringify(currentUser))
 	if (!currentUser) { return false;} 
 	// Verificamos si existe la cuenta en el auth
 	try {
 		await currentUser.reload();
-		console.log('currentUser',currentUser)
+		//console.log('currentUser',JSON.stringify(currentUser))
 	} catch (e) {
 		// En caso de estos errores que suelen ser por el emulador, se cierra la sesion
 		//@ts-ignore
@@ -29,6 +30,7 @@ export const checkExistence = async ():Promise<false | UserType> => {
 		displayName: currentUser.displayName ?? "Usuario",
 		emailVerified: currentUser.emailVerified,
 		isAnonymous: currentUser.isAnonymous,
+		providerData: currentUser.providerData,
 		creationTime:currentUser.metadata.creationTime?Number(currentUser.metadata.creationTime):0,
 		lastSignInTime:currentUser.metadata.lastSignInTime?Number(currentUser.metadata.lastSignInTime):0,
 		phoneNumber:currentUser.phoneNumber ?? "",
@@ -121,10 +123,28 @@ export const restorePassword = async(actionCode:string,newPassword:string) => {
 	} 
 }
 
-export const loginWithFacebook = async (token:string) => { 
+export const getAuthFacebook = () => auth.FacebookAuthProvider
+export const getAuthGoogle = () => auth.GoogleAuthProvider
 
+export const signWithCredentials = async(credential:any) => { 
+	try { 
+		// Se inicia sesion con las credenciales
+		await auth().signInWithCredential(credential); 
+		return true
+	} catch (error) {
+		console.log('signWithCredentials', error)
+		//@ts-ignore
+		if (error.code != "auth/account-exists-with-different-credential") {
+			//@ts-ignore
+			return error.code
+		}
+		return "secondChance"
+	}
 }
-
+export const linkCredential = (credential:any) => { 
+	auth().currentUser?.linkWithCredential(credential);
+}
+export const fetchEmailMethods =async (email:string)=> auth().fetchSignInMethodsForEmail(email)
 	
 	// cambioMiContra=async(oldPass,newPass)=>{
 	// 	const credential = auth.EmailAuthProvider.credential(auth().currentUser.email,oldPass);

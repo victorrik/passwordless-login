@@ -49,12 +49,8 @@ function PatitoButton({
 
 
 	return (
-		<TouchableOpacity disabled={disabled || loading} style={containerStyle} onPress={handlePress} activeOpacity={activeOpacity} >
-			{loading &&
-				<View style={styles.floatingLoading} >
-					<ActivityIndicator color={highlight} />
-				</View>
-			}
+		<TouchableOpacity disabled={disabled  } style={containerStyle} onPress={handlePress} activeOpacity={activeOpacity} >
+	 
 			<View style={[styles.btnGeneral, btnStyle]} >
 
 				{(icon && !iconRigth) ? 
@@ -86,7 +82,16 @@ const styles: any = StyleSheet.create({
 		paddingVertical: 12,
 		borderRadius: 4,
 		position: 'relative',
-		backgroundColor: "#286b7c"
+		backgroundColor: "#286b7c",
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+
+		elevation: 5,
 	},
 	floatingLoading: {
 		position: 'absolute',

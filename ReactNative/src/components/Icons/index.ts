@@ -7,4 +7,6 @@ export type IconsAvailable =
 |"envelope"
 |"personbadge"
 |"boxarrowright"
+|"phone"
+|"xlg"
 export {default} from './Icons';
