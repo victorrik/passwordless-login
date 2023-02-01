@@ -125,6 +125,7 @@ export const restorePassword = async(actionCode:string,newPassword:string) => {
 
 export const getAuthFacebook = () => auth.FacebookAuthProvider
 export const getAuthGoogle = () => auth.GoogleAuthProvider
+export const getAuthPhone = () => auth.PhoneAuthProvider
 
 export const signWithCredentials = async(credential:any) => { 
 	try { 
@@ -141,11 +142,19 @@ export const signWithCredentials = async(credential:any) => {
 		return "secondChance"
 	}
 }
-export const linkCredential = (credential:any) => { 
-	auth().currentUser?.linkWithCredential(credential);
-}
+export const listProviders =()=> auth().currentUser?.providerData
+export const linkCredential = (credential:any) =>  auth().currentUser?.linkWithCredential(credential)
 export const fetchEmailMethods =async (email:string)=> auth().fetchSignInMethodsForEmail(email)
-	
+
+export const signWithPhone = async(phoneNumber:string)=>{
+	try {
+		return await auth().signInWithPhoneNumber(phoneNumber);
+		
+	} catch (error) {
+		console.log("signInWithPhoneNumber", error)
+		return false
+	}
+}
 	// cambioMiContra=async(oldPass,newPass)=>{
 	// 	const credential = auth.EmailAuthProvider.credential(auth().currentUser.email,oldPass);
 	// 	const result = await auth().currentUser.reauthenticateWithCredential(credential)

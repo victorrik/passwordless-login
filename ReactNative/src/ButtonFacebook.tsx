@@ -15,15 +15,17 @@ import {
 
 import { LoginManager, Settings, AccessToken,GraphRequest, GraphRequestManager } from 'react-native-fbsdk-next';
 import { Button } from '@components';
-import { fetchEmailMethods, getAuthFacebook, signWithCredentials } from '@firebase/auth'; 
+import { getAuthFacebook, linkCredential, signWithCredentials } from '@firebase/auth'; 
 import { ButtonRef } from '@PasswordLess/components/Button';
+import useCredentialsStore from './store/useCredentialStore';
 
 Settings.initializeSDK();
 
 const facebookAuthProvider = getAuthFacebook()  
 const ButtonFacebook = ({checkCurrentUser}:{checkCurrentUser:()=>void}) => { 
 	const btnFacebook = useRef<ButtonRef>(null) 
-	const [accessToken, setAccessToken] = useState<any>();
+	
+	const credentialsStore = useCredentialsStore()
 
 	const initFacebookLogin = async () => {
 		// Attempt login with permissions
@@ -46,9 +48,11 @@ const ButtonFacebook = ({checkCurrentUser}:{checkCurrentUser:()=>void}) => {
 			Alert.alert("Ocurrio un problema al obtener tus datos")
 			return
 		}
-		setAccessToken(data)
+		
+		const facebookCredential = facebookAuthProvider.credential(data.accessToken);
+		credentialsStore.add(facebookCredential)
+
 		if (data) {
-			const facebookCredential = facebookAuthProvider.credential(data.accessToken);
 			let sign = await signWithCredentials(facebookCredential);
 				if (!sign) {
 					Alert.alert("Ocurrio un problema al registraro",sign)
@@ -57,9 +61,8 @@ const ButtonFacebook = ({checkCurrentUser}:{checkCurrentUser:()=>void}) => {
 				}
 				if (sign === "secondChance") {
 					Alert.alert(
-						"Cuenta ya registrada",
-						"Parece que ya inicio sesion con el correo asociado a su cuenta, le gustaria asociar la cuenta?"
-						,
+						"Correo en uso",
+						"Ya se ha registrado/iniciado sesion con el correo asociado a la cuenta ¿le gustaria vincularla?",
 						[
 							{text:"No",
 							onPress:()=>null
@@ -70,13 +73,15 @@ const ButtonFacebook = ({checkCurrentUser}:{checkCurrentUser:()=>void}) => {
 						]
 					)
 				}
-			
-			
+			checkCurrentUser()
 		}
 		return false;
 	}
 
 	const connectFacebook = async(accessToken:string,credential:any) => { 
+		await linkCredential(credential);
+		checkCurrentUser()
+		return
 		//@ts-ignore
 		const infoRequest = new GraphRequest('/me?fields=name,email', null, (error, result) => {
 			console.log('result',result)
@@ -89,17 +94,28 @@ const ButtonFacebook = ({checkCurrentUser}:{checkCurrentUser:()=>void}) => {
     });
     new GraphRequestManager().addRequest(infoRequest).start();
 	}
- 
+	
+	const loggedIn = credentialsStore.providers.some(({providerId})=> providerId === "facebook.com"); 
 	return (
-		<Button
-			ref={btnFacebook}
-			title='Facebook'
-			onPress={initFacebookLogin}
-			btnStyle={{ backgroundColor: "#1a74e4" }}
-			txtStyle={{ fontSize: 18, fontWeight: "bold" }}
-			icon="facebook"
-			iconRigth
-		/>
+		<>
+			{/* <Button
+				title='Extra '
+				containerStyle={{marginBottom:16}}
+				btnStyle={{ backgroundColor: "#1a74e4" }}
+				txtStyle={{ fontSize: 18, fontWeight: "bold" }}
+				onPress={()=>null}
+			/> */}
+			<Button
+				disabled={loggedIn}
+				ref={btnFacebook}
+				title='Facebook'
+				onPress={initFacebookLogin}
+				btnStyle={{ backgroundColor:loggedIn? "gray": "#1a74e4" }}
+				txtStyle={{ fontSize: 18, fontWeight: "bold" }}
+				icon="facebook"
+				iconRigth
+			/>
+		</>
 	);
 };
  
