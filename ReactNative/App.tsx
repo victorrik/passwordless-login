@@ -17,7 +17,8 @@ import {
 	ScrollView,
 	StyleSheet,
 	Text,
-	View
+	View,
+	useColorScheme
 } from 'react-native';
 import auth from '@react-native-firebase/auth'
 import { LoginManager, Settings, ShareDialog, AccessToken } from 'react-native-fbsdk-next';
@@ -31,13 +32,15 @@ Settings.initializeSDK();
 
 const SCREEN_HEIGHT= Math.round(Dimensions.get('window').height)
 const SCREEN_WIDTH = Math.round(Dimensions.get('window').width)
+
 const App = () => {
 	const btnFacebook = useRef<ButtonRef>(null)
 	const btnGoogle = useRef<ButtonRef>(null)
 	const btnEmail = useRef<ButtonRef>(null)
 	const btnPhone = useRef<ButtonRef>(null)
 	const [userData, setUserData] = useState<UserType>();
-
+	const colors = useColorScheme()
+	
 	useEffect(() => {
 		checoSiYaInicieSesion()
 	}, [])
@@ -51,19 +54,24 @@ const App = () => {
 	
 	const initFacebookLogin = async () => { 
 		// Attempt login with permissions
-		const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-		if (result.isCancelled) {
-			
-			return
+		btnFacebook.current?.handleLoading(true)
+		try {
+			const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+			if (result.isCancelled) { 
+				btnFacebook.current?.handleLoading(false)
+				return false
+			}
+		} catch (error) {
+			console.log('error',error)
+			return false
 		}
 		// Once signed in, get the users AccesToken
 		const data = await AccessToken.getCurrentAccessToken();
-		
 		if (!data) {
+			btnFacebook.current?.handleLoading(false)
 			Alert.alert("Ocurrio un problema al obtener tus datos")
 			return
 		}
-
 		if (data) {
 			try {
 				// Se crea las credenciales de firebase para facebook
@@ -73,14 +81,16 @@ const App = () => {
 				console.log('authAnswer->',authAnswer)
 				return true
 			} catch (error) {
+				console.log('error',error)
+				btnFacebook.current?.handleLoading(false)
 				Alert.alert("Ocurrio un problema registrar tus datos")
 				return false
 			}
-			
 		}
 		return false;
-
+		
 	}
+	const colorText = colors === "dark"?"white":"black";
 	return (
 		<SafeAreaView style={styles.container}>
 			<ScrollView
@@ -95,13 +105,14 @@ const App = () => {
 								<Icons name="personbadge" />
 							</View>
 						}
-						<Text style={styles.waving} >Hola <Text style={styles.displayName} >{userData.displayName}</Text></Text>
+						<Text style={[styles.waving,{color:colorText}]} >Hola <Text style={styles.displayName} >{userData.displayName}</Text></Text>
 					</View>
 				}
-				<Text style={{fontSize:20,textAlign:'center',marginBottom:16}} >
+				<Text style={{fontSize:20,textAlign:'center',marginBottom:16,color:colorText}} >
 					¿Como te gustaria <Text style={{fontWeight:"bold"}} >iniciar sesión</Text>?
 				</Text>
 				<Button 
+					ref={btnFacebook}
 					title='Facebook' 
 					onPress={initFacebookLogin} 
 					btnStyle={{backgroundColor:"#1a74e4"}}

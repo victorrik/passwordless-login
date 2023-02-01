@@ -65,4 +65,5 @@ buck-out/
 
 .env.*
 
+/android/app/src/main/res/values/
 /android/gradle.properties

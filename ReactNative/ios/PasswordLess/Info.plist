@@ -24,6 +24,25 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+  <key>CFBundleURLTypes</key>
+  <array>
+    <dict>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>fb1122588378433408</string>
+    </array>
+    </dict>
+  </array>
+  <key>FacebookAppID</key>
+  <string>1122588378433408</string>
+  <key>FacebookClientToken</key>
+  <string>4427e4f2edb914c458ad14a69b29edcf</string>
+  <key>FacebookDisplayName</key>
+  <string>Passwordless</string>
+  <key>LSApplicationQueriesSchemes</key>
+  <array>
+    <string>fbapi</string>
+  </array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
