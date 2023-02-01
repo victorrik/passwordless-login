@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "980982636933",
+    "project_id": "victorrik-1",
+    "storage_bucket": "victorrik-1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980982636933:android:1243809b0d50f48295a4ec",
+        "android_client_info": {
+          "package_name": "com.victorrik.passwordless"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "980982636933-okdfi3gbvsn14o4vr5h1moe53crf59dg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.victorrik.passwordless",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "980982636933-e3cgjkvsebfh0s6e6elotobk66b05qi3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGs5c4LVWQULSkuREn7KPqtGN4555-UcY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "980982636933-e3cgjkvsebfh0s6e6elotobk66b05qi3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "980982636933-26gstfj9ldd9d4hiaqgng59378a5cr7g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.victorrik.Proyecto-Tutorial"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

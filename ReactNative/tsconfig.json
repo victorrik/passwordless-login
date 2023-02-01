@@ -1,0 +1,31 @@
+{
+  "extends": "@tsconfig/react-native/tsconfig.json",
+
+  "compilerOptions": {
+		"target": "es2015",
+    // "useDefineForClassFields": true,
+    // "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    // "allowJs": false,
+    // "skipLibCheck": true,
+    // "esModuleInterop": false,
+    // "allowSyntheticDefaultImports": true,
+    // "strict": true,
+    // "forceConsistentCasingInFileNames": true,
+    // "module": "ESNext",
+    // "moduleResolution": "Node",
+    // "resolveJsonModule": true,
+    // "isolatedModules": true,
+    // "noEmit": true,
+		"jsx": "react",
+		"baseUrl": ".", // this must be specified if "paths" is specified.
+		"paths": {
+			"@components": ["src/components"],
+			"@firebase/*": ["src/firebase/*"],
+			"@stores/*": ["src/stores/*"],
+			"@utils/*": ["src/utils/*"],
+			"@PasswordLess/*": ["src/*"],
+			"@PasswordLessTypes": ["types"]
+		},
+		"typeRoots": ["./types"]
+  },
+}
