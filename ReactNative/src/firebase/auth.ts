@@ -1,5 +1,5 @@
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import { PatitosError } from '@PasswordLessTypes'; 
+import { PatitosError, UserType } from '@PasswordLessTypes'; 
 
 /**
  * Funcion para ver si ya ha inciado sesion antes, y verificar que existe en el auth del servidor
@@ -8,21 +8,32 @@ import { PatitosError } from '@PasswordLessTypes';
  * En caso de error se cierra la sesion y retorna false
  * @returns 
  */
-export const checkExistence = async ():Promise<false | FirebaseAuthTypes.User> => {
+export const checkExistence = async ():Promise<false | UserType> => {
 	// Verificamos si ya ha iniciado sesioon
-	let currentUser = auth().currentUser
+	const currentUser = auth().currentUser
 	if (!currentUser) { return false;} 
 	// Verificamos si existe la cuenta en el auth
-	let existenciaEnAuth = await currentUser.reload()
-		.then(()=>true)
-		.catch((e)=> {
-			// En caso de estos errores que suelen ser por el emulador, se cierra la sesion
+	try {
+		await currentUser.reload();
+		console.log('currentUser',currentUser)
+	} catch (e) {
+		// En caso de estos errores que suelen ser por el emulador, se cierra la sesion
+		//@ts-ignore
 		if (e.code === "auth/internal-error" || e.code === "auth/invalid-user-token") {
 			logout()
 		}
 		return false 
-	});
-	return existenciaEnAuth?currentUser:false
+	} 
+	return {
+		email:currentUser.email ?? "Correo no registrado",
+		displayName: currentUser.displayName ?? "Usuario",
+		emailVerified: currentUser.emailVerified,
+		isAnonymous: currentUser.isAnonymous,
+		creationTime:currentUser.metadata.creationTime?Number(currentUser.metadata.creationTime):0,
+		lastSignInTime:currentUser.metadata.lastSignInTime?Number(currentUser.metadata.lastSignInTime):0,
+		phoneNumber:currentUser.phoneNumber ?? "",
+		photoURL:currentUser.photoURL
+	}
 }
 /**
  * Funcion para cerrar sesion
@@ -108,8 +119,12 @@ export const restorePassword = async(actionCode:string,newPassword:string) => {
 		// }
 		return handleError
 	} 
+}
+
+export const loginWithFacebook = async (token:string) => { 
 
 }
+
 	
 	// cambioMiContra=async(oldPass,newPass)=>{
 	// 	const credential = auth.EmailAuthProvider.credential(auth().currentUser.email,oldPass);

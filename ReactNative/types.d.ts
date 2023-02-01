@@ -6,3 +6,18 @@ export type PatitosError = {
 	code?:any;
 	OS?: Platform.OS; 
 }
+
+export type UserType = {
+		displayName: string
+		email: string
+		emailVerified: boolean
+		isAnonymous: boolean
+		creationTime: number
+		lastSignInTime: number
+		// multiFactor: {
+		// 	enrolledFactors: Array
+		// }, 
+		phoneNumber: any,
+		photoURL: string | null
+		
+}
